@@ -9,7 +9,7 @@ namespace laboratorio3.Data
         public static void Initialize(string connectionString)
         {
             ConnectionString = connectionString;
-            GlobalConfiguration.Setup().UseSqlServer();
+            GlobalConfiguration.Setup().UseMySql();
         }
     }
 }

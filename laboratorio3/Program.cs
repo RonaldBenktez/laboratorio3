@@ -10,9 +10,8 @@ namespace laboratorio3
         {
             ApplicationConfiguration.Initialize();
 
-            // Cadena de conexión — ajusta Server según tu instancia de SQL Server
-            string connectionString =
-                "Server=localhost;Database=TiendaElectronica;Trusted_Connection=True;TrustServerCertificate=True;";
+            // Cadena de conexión — se lee de appsettings.local.ini (excluido de git)
+            string connectionString = ReadConnectionString();
 
             DatabaseConfig.Initialize(connectionString);
 
@@ -21,6 +20,21 @@ namespace laboratorio3
                 return;
 
             Application.Run(new MainForm());
+        }
+
+        private static string ReadConnectionString()
+        {
+            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.local.ini");
+            if (File.Exists(configPath))
+            {
+                foreach (var line in File.ReadAllLines(configPath))
+                {
+                    if (line.StartsWith("ConnectionString="))
+                        return line["ConnectionString=".Length..].Trim();
+                }
+            }
+            // Fallback sin contraseña (para demo sin credenciales en el repo)
+            return "Server=localhost;Database=TiendaElectronica;Uid=root;Pwd=;";
         }
     }
 }
